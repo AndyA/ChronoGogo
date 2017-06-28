@@ -1,4 +1,4 @@
-/* cronogogo.c */
+/* chronogogo.c */
 
 #include <stdio.h>
 

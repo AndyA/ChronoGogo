@@ -29,6 +29,7 @@
 /Session.vim
 /TAGS
 /autom4te.cache
+/chronogogo
 /compile
 /config.cache
 /config.guess
@@ -44,13 +45,10 @@
 /libtool
 /ltmain.sh
 /missing
-/pipecleanr
 /stamp-h*
 /tags
 /test.*
-/timewarp
 /version.h
-/y4m2patch
 Makefile
 Makefile.in
 Session.vim
