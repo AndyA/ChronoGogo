@@ -65,12 +65,12 @@ void colour_f_rgb2hsv(const colour_floats *in, colour_floats *out) {
   out->c[cS] = (max == 0 ? 0 : d / max) * 255;
 
   double h =
-      (0 == out->c[cS] ? 0 : max == in->c[cR]
-                                 ? 0 + (in->c[cG] - in->c[cB]) / d
-                                 : max == in->c[cG]
-                                       ? 2 + (in->c[cB] - in->c[cR]) / d
-                                       : 4 + (in->c[cR] - in->c[cG]) / d) *
-      256 / 6;
+    (0 == out->c[cS] ? 0 : max == in->c[cR]
+     ? 0 + (in->c[cG] - in->c[cB]) / d
+     : max == in->c[cG]
+     ? 2 + (in->c[cB] - in->c[cR]) / d
+     : 4 + (in->c[cR] - in->c[cG]) / d) *
+    256 / 6;
 
   if (h < 0)
     h += 256;
@@ -81,7 +81,8 @@ void colour_f_rgb2hsv(const colour_floats *in, colour_floats *out) {
 void colour_f_hsv2rgb(const colour_floats *in, colour_floats *out) {
   if (in->c[cS] == 0) {
     out->c[cR] = out->c[cG] = out->c[cB] = in->c[cV];
-  } else {
+  }
+  else {
     double h = in->c[cH] * 6 / 256;
     int sextant = (int)h;
     double frac = h - sextant;
@@ -140,15 +141,15 @@ void colour_f_hsv2yuv(const colour_floats *in, colour_floats *out) {
 
 void colour_b_rgb2yuv(const colour_bytes *in, colour_bytes *out) {
   out->c[cY] = clamp_b(16 + SCB(in->c[cR], 65.738) + SCB(in->c[cG], 129.057) +
-                           SCB(in->c[cB], 25.064),
+                       SCB(in->c[cB], 25.064),
                        16, 235);
 
   out->c[cCb] = clamp_b(128 - SCB(in->c[cR], 37.945) - SCB(in->c[cG], 74.494) +
-                            SCB(in->c[cB], 112.439),
+                        SCB(in->c[cB], 112.439),
                         16, 240);
 
   out->c[cCr] = clamp_b(128 + SCB(in->c[cR], 112.439) - SCB(in->c[cG], 94.154) -
-                            SCB(in->c[cB], 18.285),
+                        SCB(in->c[cB], 18.285),
                         16, 240);
 
   out->c[cA] = in->c[cA];
@@ -156,14 +157,14 @@ void colour_b_rgb2yuv(const colour_bytes *in, colour_bytes *out) {
 
 void colour_b_yuv2rgb(const colour_bytes *in, colour_bytes *out) {
   out->c[cR] = clamp_b(
-      SCB(in->c[cY], 298.082) + SCB(in->c[cCr], 408.583) - 222.921, 0, 255);
+                 SCB(in->c[cY], 298.082) + SCB(in->c[cCr], 408.583) - 222.921, 0, 255);
 
   out->c[cG] = clamp_b(SCB(in->c[cY], 298.082) - SCB(in->c[cCb], 100.291) -
-                           SCB(in->c[cCr], 208.120) + 135.576,
+                       SCB(in->c[cCr], 208.120) + 135.576,
                        0, 255);
 
   out->c[cB] = clamp_b(
-      SCB(in->c[cY], 298.082) + SCB(in->c[cCb], 516.412) - 276.836, 0, 255);
+                 SCB(in->c[cY], 298.082) + SCB(in->c[cCb], 516.412) - 276.836, 0, 255);
 
   out->c[cA] = in->c[cA];
 }
@@ -212,5 +213,5 @@ void colour_b_hsv2yuv(const colour_bytes *in, colour_bytes *out) {
 colour_OPS
 #undef X
 
-    /* vim:ts=2:sw=2:sts=2:et:ft=c
-     */
+/* vim:ts=2:sw=2:sts=2:et:ft=c
+ */

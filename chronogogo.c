@@ -6,7 +6,9 @@
 #include "colour.h"
 
 int
-main(void) {
+main(int argc, char *argv[]) {
+  (void) argc;
+  (void) argv;
   return 0;
 }
 
