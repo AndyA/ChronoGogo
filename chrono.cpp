@@ -36,16 +36,22 @@ static double dist(int dx, int dy) {
   return  sqrt(dx * dx + dy * dy);
 }
 
-static void timeCone(Mat &m, Size sz) {
-  m.create(sz, CV_8U);
+static void timeCone(Mat &m, Size sz, int channel) {
+  m.create(sz, CV_8UC3);
+
   int cx = sz.width / 2;
   int cy = sz.height / 2;
+
+  int channels = m.channels();
+  CV_Assert(channel >= 0 && channel < channels);
+
   double maxDist = dist(cx, cy);
+
   for (int y = 0; y < sz.height; y++) {
     uchar *row = m.ptr<uchar>(y);
     for (int x = 0; x < sz.width; x++) {
       double dotDist = dist(x - cx, y - cy);
-      row[x] = (unsigned char) HISTORY * dotDist / maxDist;
+      row[x * channels + channel] = (unsigned char) HISTORY * dotDist / maxDist;
     }
   }
 }
@@ -66,6 +72,8 @@ static void timeBend(Mat &out, FrameStore &fs, const Mat &timeMap) {
     size.height = 1;
   }
 
+  int width = size.width * channels;
+
   for (int y = 0; y < size.height; y++) {
     uchar *hrow[HISTORY];
     for (int i = 0; i < HISTORY; i++) {
@@ -75,22 +83,18 @@ static void timeBend(Mat &out, FrameStore &fs, const Mat &timeMap) {
     uchar *orow = out.ptr<uchar>(y);
     const uchar *trow = timeMap.ptr<uchar>(y);
 
-    for (int x = 0, xx = 0; x < size.width; x++, xx += channels) {
+    for (int x = 0; x < width; x++) {
       int delay = trow[x];
 
       if (delay < HISTORY) {
         uchar *src = hrow[delay];
         if (src) {
-          orow[xx + 0] = src[xx + 0];
-          orow[xx + 1] = src[xx + 1];
-          orow[xx + 2] = src[xx + 2];
+          orow[x] = src[x];
           continue;
         }
       }
 
-      orow[xx + 0] = 0;
-      orow[xx + 1] = 0;
-      orow[xx + 2] = 0;
+      orow[x] = 0;
     }
   }
 }
@@ -111,7 +115,8 @@ int main(int, char **) {
   Mat *fr = fs.next();
   cap >> *fr;
 
-  timeCone(timeMap, fr->size());
+  for (int c = 0; c < 3; c++)
+    timeCone(timeMap, fr->size(), c);
 
   for (;;) {
     flip(*fr, *fr, 1);
