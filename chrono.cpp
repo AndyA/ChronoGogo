@@ -5,33 +5,12 @@
 #include "opencv2/videoio.hpp"
 
 #include "framestore.hpp"
+#include "timebend.hpp"
 
 #define HISTORY 50
 
 using namespace cv;
 using namespace std;
-
-static void invert(Mat &m) {
-  CV_Assert(m.depth() == CV_8U);
-  CV_Assert(m.dims == 2);
-
-  Size size = m.size();
-
-  if (m.isContinuous()) {
-    size.width *= size.height;
-    size.height = 1;
-  }
-
-  int width = size.width * m.channels();
-
-  for (int y = 0; y < size.height; y++) {
-    uchar *row = m.ptr<uchar>(y);
-    for (int x = 0; x < width; x++) {
-      row[x] = ~row[x];
-    }
-  }
-
-}
 
 static double dist(int dx, int dy) {
   return sqrt(dx * dx + dy * dy);
@@ -92,49 +71,6 @@ static void timeSlice(Mat &m, Size sz, int down, int channel) {
 
     for (int x = 0; x < sz.width; x++) {
       row[x * channels + channel] = delay;
-    }
-  }
-}
-
-static void timeBend(Mat &out, FrameStore &fs, const Mat &timeMap) {
-  Mat *fr = fs.history(0);
-  if (!fr) return;
-
-  int channels = fr->channels();
-
-  CV_Assert(channels == 3);
-
-  Size size = fr->size();
-  out.create(size, fr->type());
-
-  if (out.isContinuous() && fr->isContinuous() && timeMap.isContinuous()) {
-    size.width *= size.height;
-    size.height = 1;
-  }
-
-  int width = size.width * channels;
-
-  for (int y = 0; y < size.height; y++) {
-    uchar *hrow[HISTORY];
-    for (int i = 0; i < HISTORY; i++) {
-      Mat *m = fs.history(i);
-      hrow[i] = m ? m->ptr<uchar>(y) : 0;
-    }
-    uchar *orow = out.ptr<uchar>(y);
-    const uchar *trow = timeMap.ptr<uchar>(y);
-
-    for (int x = 0; x < width; x++) {
-      int delay = trow[x];
-
-      if (delay < HISTORY) {
-        uchar *src = hrow[delay];
-        if (src) {
-          orow[x] = src[x];
-          continue;
-        }
-      }
-
-      orow[x] = 0;
     }
   }
 }
@@ -204,19 +140,12 @@ int main(int, char **) {
 
   setMap(timeMap, *fr, '1');
 
+  TimeBendMapped bender(&fs, &timeMap);
+
   for (;;) {
     flip(*fr, *fr, 1);
 
-    if (1) {
-      timeBend(chrono, fs, timeMap);
-    }
-    else {
-      cvtColor(*fr, chrono, COLOR_BGR2GRAY);
-      flip(chrono, chrono, 1);
-      GaussianBlur(chrono, chrono, Size(7, 7), 1.5, 1.5);
-      Canny(chrono, chrono, 0, 30, 3);
-      invert(chrono);
-    }
+    bender.process(chrono);
     imshow("chrono", chrono);
 
     int k = waitKey(10);

@@ -16,6 +16,10 @@ unsigned FrameStore::position() {
   return nextPos;
 }
 
+unsigned FrameStore::length() {
+  return frameCount;
+}
+
 Mat *FrameStore::next() {
   unsigned pos = nextPos++;
   if (used < nextPos)

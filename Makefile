@@ -6,13 +6,13 @@ LDFLAGS  = $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig:${OPENCV_LIB_BREW}/pk
 LDLIBS   = -lstdc++ -lm
 LDLIBS   += $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig:${OPENCV_LIB_BREW}/pkgconfig pkg-config --libs-only-l opencv)
 
-sources = chrono.cpp framestore.cpp
+sources = chrono.cpp framestore.cpp timebend.cpp chronogogo.cpp
 
 .PHONY: clean
 
 default: chrono
 
-chrono: chrono.o framestore.o
+chrono: $(sources:.cpp=.o)
 
 clean:
 	rm -f *.o *.d chrono
