@@ -8,6 +8,10 @@ FrameStore::FrameStore(unsigned count) {
   frames = new Mat[count];
 }
 
+unsigned FrameStore::position() {
+  return nextPos;
+}
+
 Mat *FrameStore::next() {
   unsigned pos = nextPos++;
   if (used < nextPos)

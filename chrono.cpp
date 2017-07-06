@@ -67,18 +67,19 @@ int main(int, char **) {
   timeCone(timeMap, frame.size());
 
   for (;;) {
-    cap >> frame; // get a new frame from camera
+    Mat *fr = fs.next();
+    cap >> *fr; // get a new *fr from camera
     if (0) {
-      imshow("chrono", frame);
+      imshow("chrono", *fr);
     }
     else {
-      cvtColor(frame, chrono, COLOR_BGR2GRAY);
+      cvtColor(*fr, chrono, COLOR_BGR2GRAY);
       flip(chrono, chrono, 1);
       GaussianBlur(chrono, chrono, Size(7, 7), 1.5, 1.5);
       Canny(chrono, chrono, 0, 30, 3);
       if (1) {
         char buf[100];
-        sprintf(buf, "type: %d, channels: %d", frame.type(), frame.channels());
+        sprintf(buf, "pos: %3d", fs.position());
         putText(chrono, buf, Point2f(100, 150), FONT_HERSHEY_DUPLEX, 3,  Scalar(255, 255, 255));
       }
       invert(chrono);

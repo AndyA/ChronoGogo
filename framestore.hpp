@@ -9,5 +9,6 @@ private:
 
 public:
   FrameStore(unsigned count);
+  unsigned position();
   cv::Mat *next();
 };
