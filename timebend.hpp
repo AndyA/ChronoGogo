@@ -7,17 +7,17 @@
 
 class TimeBend {
 protected:
-  FrameStore *fs;
+  FrameStore &fs;
 public:
-  TimeBend(FrameStore *frameStore);
+  TimeBend(FrameStore &frameStore);
   virtual void process(cv::Mat &out) = 0;
 };
 
 class TimeBendMapped : TimeBend {
 private:
-  cv::Mat *timeMap;
+  cv::Mat &timeMap;
 public:
-  TimeBendMapped(FrameStore *frameStore, cv::Mat *map);
+  TimeBendMapped(FrameStore &frameStore, cv::Mat &map);
   virtual void process(cv::Mat &out);
 };
 

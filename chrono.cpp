@@ -140,7 +140,7 @@ int main(int, char **) {
 
   setMap(timeMap, *fr, '1');
 
-  TimeBendMapped bender(&fs, &timeMap);
+  TimeBendMapped bender(fs, timeMap);
 
   for (;;) {
     flip(*fr, *fr, 1);

@@ -2,16 +2,16 @@
 
 using namespace cv;
 
-TimeBend::TimeBend(FrameStore *frameStore) {
-  fs = frameStore;
+TimeBend::TimeBend(FrameStore &frameStore)
+  : fs(frameStore) {
 }
 
-TimeBendMapped::TimeBendMapped(FrameStore *frameStore, Mat *map) : TimeBend(frameStore) {
-  timeMap = map;
+TimeBendMapped::TimeBendMapped(FrameStore &frameStore, Mat &map)
+  : TimeBend(frameStore), timeMap(map) {
 }
 
 void TimeBendMapped::process(Mat &out) {
-  Mat *fr = fs->history(0);
+  Mat *fr = fs.history(0);
   if (!fr) return;
 
   int channels = fr->channels();
@@ -21,22 +21,22 @@ void TimeBendMapped::process(Mat &out) {
   Size size = fr->size();
   out.create(size, fr->type());
 
-  if (out.isContinuous() && fr->isContinuous() && timeMap->isContinuous()) {
+  if (out.isContinuous() && fr->isContinuous() && timeMap.isContinuous()) {
     size.width *= size.height;
     size.height = 1;
   }
 
   int width = size.width * channels;
-  int histLen = fs->length();
+  int histLen = fs.length();
 
   for (int y = 0; y < size.height; y++) {
     uchar *hrow[histLen];
     for (int i = 0; i < histLen; i++) {
-      Mat *m = fs->history(i);
+      Mat *m = fs.history(i);
       hrow[i] = m ? m->ptr<uchar>(y) : 0;
     }
     uchar *orow = out.ptr<uchar>(y);
-    const uchar *trow = timeMap->ptr<uchar>(y);
+    const uchar *trow = timeMap.ptr<uchar>(y);
 
     for (int x = 0; x < width; x++) {
       int delay = trow[x];
