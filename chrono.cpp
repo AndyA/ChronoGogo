@@ -75,6 +75,27 @@ static void timeRand(Mat &m, Size sz, int channel) {
   }
 }
 
+static void timeSlice(Mat &m, Size sz, int down, int channel) {
+  m.create(sz, CV_8UC3);
+
+  int channels = m.channels();
+  CV_Assert(channel >= 0 && channel < channels);
+
+  for (int y = 0; y < sz.height; y++) {
+    uchar *row = m.ptr<uchar>(y);
+    int delay = y * HISTORY / sz.height;
+
+    if (down < 0)
+      delay = HISTORY - 1 - delay;
+    else if (down == 0)
+      delay = 0;
+
+    for (int x = 0; x < sz.width; x++) {
+      row[x * channels + channel] = delay;
+    }
+  }
+}
+
 static void timeBend(Mat &out, FrameStore &fs, const Mat &timeMap) {
   Mat *fr = fs.history(0);
   if (!fr) return;
@@ -118,27 +139,48 @@ static void timeBend(Mat &out, FrameStore &fs, const Mat &timeMap) {
   }
 }
 
+static void timeSpin(Mat &timeMap, const Mat &frame, double radius) {
+  for (int c = 0; c < 3; c++) {
+    double cx = sin(M_PI * 2 / 3 * c) * radius + 0.5;
+    double cy = cos(M_PI * 2 / 3 * c) * radius + 0.5;
+    timeCone(timeMap, frame.size(), cx, cy, c);
+  }
+}
+
 static void setMap(Mat &timeMap, const Mat &frame, int which) {
   switch (which) {
   default:
-  case '0':
-    for (int c = 0; c < 3; c++) {
-      timeCone(timeMap, frame.size(), 0.5, 0.5, c);
-    }
-    break;
-
   case '1':
-    for (int c = 0; c < 3; c++) {
-      double cx = sin(M_PI * 2 / 3 * c) * 0.1 + 0.5;
-      double cy = cos(M_PI * 2 / 3 * c) * 0.1 + 0.5;
-      timeCone(timeMap, frame.size(), cx, cy, c);
-    }
+    for (int c = 0; c < 3; c++)
+      timeCone(timeMap, frame.size(), 0.5, 0.5, c);
     break;
 
   case '2':
-    for (int c = 0; c < 3; c++) {
+    timeSpin(timeMap, frame, 0.05);
+    break;
+
+  case '3':
+    timeSpin(timeMap, frame, 0.3);
+    break;
+
+  case '4':
+    for (int c = 0; c < 3; c++)
+      timeSlice(timeMap, frame.size(), -1, c);
+    break;
+
+  case '5':
+    for (int c = 0; c < 3; c++)
+      timeSlice(timeMap, frame.size(), 1, c);
+    break;
+
+  case '6':
+    for (int c = 0; c < 3; c++)
+      timeSlice(timeMap, frame.size(), c - 1, c);
+    break;
+
+  case '9':
+    for (int c = 0; c < 3; c++)
       timeRand(timeMap, frame.size(), c);
-    }
     break;
   }
 }
