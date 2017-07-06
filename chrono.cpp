@@ -1,4 +1,5 @@
 #include <math.h>
+#include <algorithm>
 
 #include "opencv2/opencv.hpp"
 #include "opencv2/videoio.hpp"
@@ -36,16 +37,19 @@ static double dist(int dx, int dy) {
   return  sqrt(dx * dx + dy * dy);
 }
 
-static void timeCone(Mat &m, Size sz, int channel) {
+static void timeCone(Mat &m, Size sz, double cxp, double cyp, int channel) {
   m.create(sz, CV_8UC3);
-
-  int cx = sz.width / 2;
-  int cy = sz.height / 2;
 
   int channels = m.channels();
   CV_Assert(channel >= 0 && channel < channels);
 
-  double maxDist = dist(cx, cy);
+  int cx = (int)(sz.width * cxp);
+  int cy = (int)(sz.height * cyp);
+
+  int sx = max(cx, sz.width - 1 - cx);
+  int sy = max(cy, sz.height - 1 - cy);
+
+  double maxDist = dist(sx, sy);
 
   for (int y = 0; y < sz.height; y++) {
     uchar *row = m.ptr<uchar>(y);
@@ -115,8 +119,11 @@ int main(int, char **) {
   Mat *fr = fs.next();
   cap >> *fr;
 
-  for (int c = 0; c < 3; c++)
-    timeCone(timeMap, fr->size(), c);
+  for (int c = 0; c < 3; c++) {
+    double cx = sin(M_PI * 2 / 3 * c) * 0.1 + 0.5;
+    double cy = cos(M_PI * 2 / 3 * c) * 0.1 + 0.5;
+    timeCone(timeMap, fr->size(), cx, cy, c);
+  }
 
   for (;;) {
     flip(*fr, *fr, 1);
