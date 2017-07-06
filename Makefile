@@ -1,9 +1,10 @@
 OPENCV_LIB = "/opt/opencv/lib"
-CXXFLAGS = -Wall
-CXXFLAGS += $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig pkg-config --cflags opencv)
-LDFLAGS  = $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig pkg-config --libs-only-L opencv)
+OPENCV_LIB_BREW = "/usr/local/opt/opencv3/lib"
+CXXFLAGS = -Wall -g3
+CXXFLAGS += $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig:${OPENCV_LIB_BREW}/pkgconfig pkg-config --cflags opencv)
+LDFLAGS  = $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig:${OPENCV_LIB_BREW}/pkgconfig pkg-config --libs-only-L opencv)
 LDLIBS   = -lstdc++ -lm
-LDLIBS   += $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig pkg-config --libs-only-l opencv)
+LDLIBS   += $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig:${OPENCV_LIB_BREW}/pkgconfig pkg-config --libs-only-l opencv)
 
 sources = chrono.cpp framestore.cpp
 
@@ -14,7 +15,7 @@ default: chrono
 chrono: chrono.o framestore.o
 
 clean:
-	rm *.o *.d chrono
+	rm -f *.o *.d chrono
 
 %.d: %.cpp
 	@set -e; rm -f $@; \
