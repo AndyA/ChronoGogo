@@ -100,9 +100,9 @@ static void timeBend(Mat &out, FrameStore &fs, const Mat &timeMap) {
 
 int main(int, char **) {
   FrameStore fs(HISTORY);
-  VideoCapture cap(0); // open the default camera
+  VideoCapture cap(0);
 
-  if (!cap.isOpened()) // check if we succeeded
+  if (!cap.isOpened())
     return -1;
 
   cap.set(CV_CAP_PROP_FRAME_WIDTH, 1920);
