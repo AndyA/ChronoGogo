@@ -34,7 +34,7 @@ static void invert(Mat &m) {
 }
 
 static double dist(int dx, int dy) {
-  return  sqrt(dx * dx + dy * dy);
+  return sqrt(dx * dx + dy * dy);
 }
 
 static void timeCone(Mat &m, Size sz, double cxp, double cyp, int channel) {
