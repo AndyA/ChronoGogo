@@ -6,7 +6,7 @@
 
 #include "framestore.hpp"
 
-#define HISTORY 30
+#define HISTORY 50
 
 using namespace cv;
 using namespace std;
