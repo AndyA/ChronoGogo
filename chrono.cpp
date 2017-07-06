@@ -70,8 +70,10 @@ static void timeBend(Mat &out, FrameStore &fs, const Mat &timeMap) {
     uchar *hrow[HISTORY];
     for (int i = 0; i < HISTORY; i++) {
       Mat *m = fs.history(i);
-      if (m) hrow[i] = m->ptr<uchar>(y);
-      else hrow[i] = 0;
+      if (m)
+        hrow[i] = m->ptr<uchar>(y);
+      else
+        hrow[i] = 0;
     }
     uchar *orow = out.ptr<uchar>(y);
     const uchar *trow = timeMap.ptr<uchar>(y);
