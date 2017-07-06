@@ -9,7 +9,7 @@ FrameStore::FrameStore(unsigned count) {
 }
 
 FrameStore::~FrameStore() {
-  delete frames;
+  delete [] frames;
 }
 
 unsigned FrameStore::position() {
