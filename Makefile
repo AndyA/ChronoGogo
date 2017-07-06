@@ -1,16 +1,17 @@
 OPENCV_LIB = "/opt/opencv/lib"
-CXXFLAGS = $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig pkg-config --cflags opencv)
+CXXFLAGS = -Wall
+CXXFLAGS += $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig pkg-config --cflags opencv)
 LDFLAGS  = $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig pkg-config --libs-only-L opencv)
-LDLIBS   = -lstdc++
+LDLIBS   = -lstdc++ -lm
 LDLIBS   += $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig pkg-config --libs-only-l opencv)
 
-sources = chrono.cpp
+sources = chrono.cpp framestore.cpp
 
 .PHONY: clean
 
 default: chrono
 
-chrono: chrono.o
+chrono: chrono.o framestore.o
 
 clean:
 	rm *.o *.d chrono
