@@ -130,7 +130,7 @@ int main(int, char **) {
       imshow("chrono", chrono);
     }
 
-    if (waitKey(10) >= 0) break;
+    waitKey(10);
 
     fr = fs.next();
     cap >> *fr;
