@@ -70,10 +70,7 @@ static void timeBend(Mat &out, FrameStore &fs, const Mat &timeMap) {
     uchar *hrow[HISTORY];
     for (int i = 0; i < HISTORY; i++) {
       Mat *m = fs.history(i);
-      if (m)
-        hrow[i] = m->ptr<uchar>(y);
-      else
-        hrow[i] = 0;
+      hrow[i] = m ? m->ptr<uchar>(y) : 0;
     }
     uchar *orow = out.ptr<uchar>(y);
     const uchar *trow = timeMap.ptr<uchar>(y);
@@ -121,7 +118,6 @@ int main(int, char **) {
 
     if (1) {
       timeBend(chrono, fs, timeMap);
-      imshow("chrono", chrono);
     }
     else {
       cvtColor(*fr, chrono, COLOR_BGR2GRAY);
@@ -129,14 +125,14 @@ int main(int, char **) {
       GaussianBlur(chrono, chrono, Size(7, 7), 1.5, 1.5);
       Canny(chrono, chrono, 0, 30, 3);
       invert(chrono);
-      imshow("chrono", chrono);
     }
+    imshow("chrono", chrono);
 
     waitKey(10);
 
     fr = fs.next();
     cap >> *fr;
   }
-  // the camera will be deinitialized automatically in VideoCapture destructor
+
   return 0;
 }
