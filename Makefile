@@ -1,10 +1,11 @@
-OPENCV_LIB = "/opt/opencv/lib"
-OPENCV_LIB_BREW = "/usr/local/opt/opencv3/lib"
 CXXFLAGS = -Wall -g3
-CXXFLAGS += $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig:${OPENCV_LIB_BREW}/pkgconfig pkg-config --cflags opencv)
-LDFLAGS  = $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig:${OPENCV_LIB_BREW}/pkgconfig pkg-config --libs-only-L opencv)
 LDLIBS   = -lstdc++ -lm
-LDLIBS   += $(shell PKG_CONFIG_PATH=${OPENCV_LIB}/pkgconfig:${OPENCV_LIB_BREW}/pkgconfig pkg-config --libs-only-l opencv)
+
+PKG_CONFIG_PATH = "/opt/opencv/lib/pkgconfig:/usr/local/opt/opencv3/lib/pkgconfig"
+
+CXXFLAGS += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --cflags opencv)
+LDFLAGS  += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --libs-only-L opencv)
+LDLIBS   += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --libs-only-l opencv)
 
 sources = chrono.cpp framestore.cpp timebend.cpp chronogogo.cpp
 
