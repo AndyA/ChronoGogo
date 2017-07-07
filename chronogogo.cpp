@@ -92,7 +92,6 @@ void ChronoGogo::setMode(int key) {
   CV_Assert(frame);
 
   switch (key) {
-  default:
   case '1':
     for (int c = 0; c < 3; c++)
       timeCone(timeMap, frame->size(), 0.5, 0.5, histLen, c);
