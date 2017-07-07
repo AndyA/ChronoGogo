@@ -150,6 +150,7 @@ void ChronoGogo::setMode(int key) {
     timeRand(timeMap, frame->size(), histLen, 0);
     copyPlane(timeMap, 0, 1);
     copyPlane(timeMap, 0, 2);
+    bender = mappedBender;
     break;
 
   case '9':
