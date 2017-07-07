@@ -6,6 +6,7 @@ ChronoGogo::ChronoGogo(unsigned histSize) : fs(histSize) {
   mappedBender = new TimeBendMapped(fs, timeMap);
   adaptiveBender = new TimeBendAdaptive(fs);
   bender = mappedBender;
+  flipped = true;
 }
 
 ChronoGogo::~ChronoGogo() {
@@ -135,12 +136,26 @@ void ChronoGogo::setMode(int key) {
       timeRand(timeMap, frame->size(), histLen, c);
     bender = mappedBender;
     break;
+
+  case 'F':
+  case 'f':
+    toggleFlipped();
+    break;
   }
 }
 
+void ChronoGogo::setFlipped(bool f) { flipped = f; }
+
+bool ChronoGogo::getFlipped() { return flipped; }
+
+void ChronoGogo::toggleFlipped() { setFlipped(!getFlipped()); }
+
 void ChronoGogo::process(Mat &out) {
-  if (bender)
+  if (bender) {
     bender->process(out);
+    if (flipped)
+      flip(out, out, 1);
+  }
 }
 
 Mat *ChronoGogo::next() { return fs.next(); }

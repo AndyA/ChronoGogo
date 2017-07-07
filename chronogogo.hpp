@@ -13,11 +13,15 @@ private:
   TimeBendMapped *mappedBender;
   TimeBendAdaptive *adaptiveBender;
   cv::Mat timeMap;
+  bool flipped;
 
 public:
   ChronoGogo(unsigned histSize);
   ~ChronoGogo();
   void setMode(int key);
+  void setFlipped(bool f);
+  bool getFlipped();
+  void toggleFlipped();
   void process(cv::Mat &out);
   cv::Mat *next();
 };

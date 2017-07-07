@@ -31,8 +31,6 @@ int main(int, char **) {
   gogo.setMode('1');
 
   for (;;) {
-    flip(*fr, *fr, 1);
-
     gogo.process(chrono);
     imshow("chrono", chrono);
 
@@ -41,8 +39,7 @@ int main(int, char **) {
     if (k == 'Q' || k == 'q' || k == 27)
       break;
 
-    if (k >= '0' && k <= '9')
-      gogo.setMode(k);
+    gogo.setMode(k);
 
     fr = gogo.next();
     cap >> *fr;
