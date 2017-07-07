@@ -10,6 +10,7 @@ ChronoGogo::ChronoGogo(unsigned histSize) : fs(histSize) {
 
 ChronoGogo::~ChronoGogo() {
   delete mappedBender;
+  delete adaptiveBender;
 }
 
 static double dist(int dx, int dy) {
