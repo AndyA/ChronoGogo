@@ -7,6 +7,17 @@
 #include "timebend.hpp"
 
 class ChronoGogo {
+private:
+  FrameStore fs;
+  TimeBend *bender;
+  TimeBendMapped *mappedBender;
+  cv::Mat timeMap;
+public:
+  ChronoGogo(unsigned histSize);
+  ~ChronoGogo();
+  void setMode(int key);
+  void process(cv::Mat &out);
+  cv::Mat *next();
 };
 
 #endif

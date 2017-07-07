@@ -13,11 +13,12 @@ public:
   virtual void process(cv::Mat &out) = 0;
 };
 
-class TimeBendMapped : TimeBend {
+class TimeBendMapped : public TimeBend {
 private:
   cv::Mat &timeMap;
 public:
   TimeBendMapped(FrameStore &frameStore, cv::Mat &map);
+  virtual ~TimeBendMapped() {};
   virtual void process(cv::Mat &out);
 };
 
