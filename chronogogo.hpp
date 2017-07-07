@@ -11,6 +11,7 @@ private:
   FrameStore fs;
   TimeBend *bender;
   TimeBendMapped *mappedBender;
+  TimeBendAdaptive *adaptiveBender;
   cv::Mat timeMap;
 public:
   ChronoGogo(unsigned histSize);

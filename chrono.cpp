@@ -4,8 +4,6 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/videoio.hpp"
 
-#include "framestore.hpp"
-#include "timebend.hpp"
 #include "chronogogo.hpp"
 
 #define HISTORY 50

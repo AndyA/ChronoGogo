@@ -4,6 +4,7 @@ using namespace cv;
 
 ChronoGogo::ChronoGogo(unsigned histSize) : fs(histSize) {
   mappedBender = new TimeBendMapped(fs, timeMap);
+  adaptiveBender = new TimeBendAdaptive(fs);
   bender = mappedBender;
 }
 
@@ -122,6 +123,10 @@ void ChronoGogo::setMode(int key) {
     for (int c = 0; c < 3; c++)
       timeSlice(timeMap, frame->size(), c - 1, histLen, c);
     bender = mappedBender;
+    break;
+
+  case '7':
+    bender = adaptiveBender;
     break;
 
   case '9':
