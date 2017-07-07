@@ -1,2 +1,7 @@
 cmd: "make"
 name: "Build Chrono"
+
+targets:
+  "Run Chrono":
+    cmd: "make && ./chrono"
+    name: "Run Chrono"
