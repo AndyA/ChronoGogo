@@ -24,10 +24,12 @@ void TimeBendMapped::process(Mat &out) {
 
   for (int y = 0; y < size.height; y++) {
     uchar *hrow[histLen];
+
     for (int i = 0; i < histLen; i++) {
       Mat *m = fs.history(i);
       hrow[i] = m ? m->ptr<uchar>(y) : 0;
     }
+
     uchar *orow = out.ptr<uchar>(y);
     const uchar *trow = timeMap.ptr<uchar>(y);
 
@@ -69,10 +71,12 @@ void TimeBendAdaptive::process(Mat &out) {
 
   for (int y = 0; y < size.height; y++) {
     uchar *hrow[histLen];
+
     for (int i = 0; i < histLen; i++) {
       Mat *m = fs.history(i);
       hrow[i] = m ? m->ptr<uchar>(y) : 0;
     }
+
     uchar *orow = out.ptr<uchar>(y);
 
     for (int x = 0; x < width; x++) {
