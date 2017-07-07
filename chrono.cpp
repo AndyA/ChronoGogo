@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include <math.h>
 
 #include "opencv2/opencv.hpp"
@@ -11,8 +12,21 @@
 using namespace cv;
 using namespace std;
 
-int main(int, char **) {
-  ChronoGogo gogo(HISTORY);
+int main(int argc, char *argv[]) {
+  int histLen = HISTORY;
+
+  if (argc > 2) {
+    cerr << "Usage: " << argv[0] << " [<history>]\n";
+    return 1;
+  }
+
+  if (argc > 1) {
+    histLen = atoi(argv[1]);
+  }
+
+  cout << "History: " << histLen << " steps\n";
+
+  ChronoGogo gogo(histLen);
   VideoCapture cap(0);
 
   if (!cap.isOpened())
