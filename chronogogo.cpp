@@ -55,6 +55,22 @@ static void timeRand(Mat &m, Size sz, int histLen, int channel) {
   }
 }
 
+static void copyPlane(Mat &m, int from, int to) {
+  int channels = m.channels();
+  CV_Assert(from >= 0 && from < channels);
+  CV_Assert(to >= 0 && to < channels);
+  if (to == from)
+    return;
+  Size sz = m.size();
+
+  for (int y = 0; y < sz.height; y++) {
+    uchar *row = m.ptr<uchar>(y);
+    for (int x = 0; x < sz.width; x++) {
+      row[x * channels + to] = row[x * channels + from];
+    }
+  }
+}
+
 static void timeSlice(Mat &m, Size sz, int down, int histLen, int channel) {
   m.create(sz, CV_8UC3);
 
@@ -128,6 +144,12 @@ void ChronoGogo::setMode(int key) {
 
   case '7':
     bender = adaptiveBender;
+    break;
+
+  case '8':
+    timeRand(timeMap, frame->size(), histLen, 0);
+    copyPlane(timeMap, 0, 1);
+    copyPlane(timeMap, 0, 2);
     break;
 
   case '9':
