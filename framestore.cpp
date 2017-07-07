@@ -2,8 +2,7 @@
 
 using namespace cv;
 
-FrameStore::FrameStore(unsigned count) {
-  frameCount = count;
+FrameStore::FrameStore(unsigned count) : frameCount(count) {
   nextPos = used = 0;
   frames = new Mat[count];
 }
