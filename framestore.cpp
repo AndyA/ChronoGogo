@@ -8,17 +8,11 @@ FrameStore::FrameStore(unsigned count) {
   frames = new Mat[count];
 }
 
-FrameStore::~FrameStore() {
-  delete [] frames;
-}
+FrameStore::~FrameStore() { delete[] frames; }
 
-unsigned FrameStore::position() {
-  return nextPos;
-}
+unsigned FrameStore::position() { return nextPos; }
 
-unsigned FrameStore::length() {
-  return frameCount;
-}
+unsigned FrameStore::length() { return frameCount; }
 
 Mat *FrameStore::next() {
   unsigned pos = nextPos++;
@@ -34,7 +28,7 @@ Mat *FrameStore::history(int index) {
     return 0;
 
   // 0 == current frame, 1 == frame before etc
-  int pos = (int) nextPos - 1 - index;
+  int pos = (int)nextPos - 1 - index;
 
   if (pos < 0) {
     if (used < frameCount)

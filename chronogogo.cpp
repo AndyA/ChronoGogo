@@ -13,11 +13,10 @@ ChronoGogo::~ChronoGogo() {
   delete adaptiveBender;
 }
 
-static double dist(int dx, int dy) {
-  return sqrt(dx * dx + dy * dy);
-}
+static double dist(int dx, int dy) { return sqrt(dx * dx + dy * dy); }
 
-static void timeCone(Mat &m, Size sz, double cxp, double cyp, int histLen, int channel) {
+static void timeCone(Mat &m, Size sz, double cxp, double cyp, int histLen,
+                     int channel) {
   m.create(sz, CV_8UC3);
 
   int channels = m.channels();
@@ -35,7 +34,7 @@ static void timeCone(Mat &m, Size sz, double cxp, double cyp, int histLen, int c
     uchar *row = m.ptr<uchar>(y);
     for (int x = 0; x < sz.width; x++) {
       double dotDist = dist(x - cx, y - cy);
-      row[x * channels + channel] = (unsigned char) histLen * dotDist / maxDist;
+      row[x * channels + channel] = (unsigned char)histLen * dotDist / maxDist;
     }
   }
 }
@@ -49,13 +48,13 @@ static void timeRand(Mat &m, Size sz, int histLen, int channel) {
   for (int y = 0; y < sz.height; y++) {
     uchar *row = m.ptr<uchar>(y);
     for (int x = 0; x < sz.width; x++) {
-      double r = (double) rand() / RAND_MAX;
-      row[x * channels + channel] = (unsigned char) histLen * r;
+      double r = (double)rand() / RAND_MAX;
+      row[x * channels + channel] = (unsigned char)histLen * r;
     }
   }
 }
 
-static void timeSlice(Mat &m, Size sz, int down, int histLen,  int channel) {
+static void timeSlice(Mat &m, Size sz, int down, int histLen, int channel) {
   m.create(sz, CV_8UC3);
 
   int channels = m.channels();
@@ -76,7 +75,8 @@ static void timeSlice(Mat &m, Size sz, int down, int histLen,  int channel) {
   }
 }
 
-static void timeSpin(Mat &timeMap, const Mat &frame, double radius, int histLen) {
+static void timeSpin(Mat &timeMap, const Mat &frame, double radius,
+                     int histLen) {
   for (int c = 0; c < 3; c++) {
     double cx = sin(M_PI * 2 / 3 * c) * radius + 0.5;
     double cy = cos(M_PI * 2 / 3 * c) * radius + 0.5;
@@ -139,9 +139,8 @@ void ChronoGogo::setMode(int key) {
 }
 
 void ChronoGogo::process(Mat &out) {
-  if (bender) bender->process(out);
+  if (bender)
+    bender->process(out);
 }
 
-Mat *ChronoGogo::next() {
-  return fs.next();
-}
+Mat *ChronoGogo::next() { return fs.next(); }

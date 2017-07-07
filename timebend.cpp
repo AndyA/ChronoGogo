@@ -4,7 +4,8 @@ using namespace cv;
 
 void TimeBendMapped::process(Mat &out) {
   Mat *fr = fs.history(0);
-  if (!fr) return;
+  if (!fr)
+    return;
 
   int channels = fr->channels();
 
@@ -48,7 +49,8 @@ void TimeBendMapped::process(Mat &out) {
 
 void TimeBendAdaptive::process(Mat &out) {
   Mat *fr = fs.history(0);
-  if (!fr) return;
+  if (!fr)
+    return;
 
   int channels = fr->channels();
 

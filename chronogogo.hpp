@@ -13,6 +13,7 @@ private:
   TimeBendMapped *mappedBender;
   TimeBendAdaptive *adaptiveBender;
   cv::Mat timeMap;
+
 public:
   ChronoGogo(unsigned histSize);
   ~ChronoGogo();
