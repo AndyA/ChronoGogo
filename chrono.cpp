@@ -37,12 +37,15 @@ int main(int argc, char *argv[]) {
 
   namedWindow("chrono", 1);
 
+  // Grab a frame before building delay map so we know what
+  // size it needs to be.
   Mat *fr = gogo.next();
-  Mat chrono;
-
   cap >> *fr;
 
+  // Default to mode '1'
   gogo.setMode('1');
+
+  Mat chrono;
 
   for (;;) {
     gogo.process(chrono);
