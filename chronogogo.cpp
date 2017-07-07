@@ -2,11 +2,10 @@
 
 using namespace cv;
 
-ChronoGogo::ChronoGogo(unsigned histSize) : fs(histSize) {
+ChronoGogo::ChronoGogo(unsigned histSize) : fs(histSize), flipped(true) {
   mappedBender = new TimeBendMapped(fs, timeMap);
   adaptiveBender = new TimeBendAdaptive(fs);
   bender = mappedBender;
-  flipped = true;
 }
 
 ChronoGogo::~ChronoGogo() {
