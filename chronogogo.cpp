@@ -1,11 +1,16 @@
+#include <iostream>
+
 #include "chronogogo.hpp"
 
 using namespace cv;
+using namespace std;
 
-ChronoGogo::ChronoGogo(unsigned histSize) : fs(histSize), flipped(true) {
+ChronoGogo::ChronoGogo(unsigned histSize) : fs(histSize), flipped(true), sequence(false) {
   mappedBender = new TimeBendMapped(fs, timeMap);
   adaptiveBender = new TimeBendAdaptive(fs);
   bender = mappedBender;
+  dwell = 30;
+  sequencePos = 0;
 }
 
 ChronoGogo::~ChronoGogo() {
@@ -13,7 +18,9 @@ ChronoGogo::~ChronoGogo() {
   delete adaptiveBender;
 }
 
-static double dist(int dx, int dy) { return sqrt(dx * dx + dy * dy); }
+static double dist(int dx, int dy) {
+  return sqrt(dx * dx + dy * dy);
+}
 
 static void timeCone(Mat &m, Size sz, double cxp, double cyp, int histLen,
                      int channel) {
@@ -100,8 +107,7 @@ static void timeSpin(Mat &timeMap, const Mat &frame, double radius,
   }
 }
 
-void ChronoGogo::setMode(int key) {
-
+void ChronoGogo::setEffect(int key) {
   unsigned histLen = fs.length();
   Mat *frame = fs.history(0);
   CV_Assert(frame);
@@ -157,6 +163,23 @@ void ChronoGogo::setMode(int key) {
       timeRand(timeMap, frame->size(), histLen, c);
     bender = mappedBender;
     break;
+  }
+}
+
+void ChronoGogo::setMode(int key) {
+  switch (key & 0xFF) {
+  case 0xFF:
+    break;
+
+  default:
+    setEffect(key);
+    sequence = false;
+    break;
+
+  case 'S':
+  case 's':
+    sequence = true;
+    break;
 
   case 'F':
   case 'f':
@@ -165,13 +188,36 @@ void ChronoGogo::setMode(int key) {
   }
 }
 
-void ChronoGogo::setFlipped(bool f) { flipped = f; }
+void ChronoGogo::nextStep() {
+  if (!sequence) return;
 
-bool ChronoGogo::getFlipped() { return flipped; }
+  const char *modes = "123456789";
+  unsigned nextMode = modes[sequencePos++];
+  if (nextMode == 0) {
+    sequencePos = 0;
+    nextMode = modes[sequencePos];
+  }
 
-void ChronoGogo::toggleFlipped() { setFlipped(!getFlipped()); }
+  setEffect(nextMode);
+}
+
+void ChronoGogo::setFlipped(bool f) {
+  flipped = f;
+}
+
+bool ChronoGogo::getFlipped() {
+  return flipped;
+}
+
+void ChronoGogo::toggleFlipped() {
+  setFlipped(!getFlipped());
+}
 
 void ChronoGogo::process(Mat &out) {
+  if (++frameCount >= dwell) {
+    frameCount = 0;
+    nextStep();
+  }
   if (bender) {
     bender->process(out);
     if (flipped)
@@ -179,4 +225,6 @@ void ChronoGogo::process(Mat &out) {
   }
 }
 
-Mat *ChronoGogo::next() { return fs.next(); }
+Mat *ChronoGogo::next() {
+  return fs.next();
+}

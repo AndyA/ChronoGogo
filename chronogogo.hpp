@@ -14,6 +14,14 @@ private:
   TimeBendAdaptive *adaptiveBender;
   cv::Mat timeMap;
   bool flipped;
+  unsigned frameCount;
+  bool sequence;
+  unsigned dwell;
+  unsigned sequencePos;
+
+private:
+  void setEffect(int key);
+  void nextStep();
 
 public:
   ChronoGogo(unsigned histSize);
