@@ -32,8 +32,8 @@ int main(int argc, char *argv[]) {
   if (!cap.isOpened())
     return -1;
 
-  cap.set(CV_CAP_PROP_FRAME_WIDTH, 1920);
-  cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1080);
+  cap.set(CAP_PROP_FRAME_WIDTH, 1920);
+  cap.set(CAP_PROP_FRAME_HEIGHT, 1080);
 
   namedWindow("chrono", 1);
 

@@ -1,11 +1,10 @@
-CXXFLAGS = -Wall -g3
+CXXFLAGS = -Wall -g3 -std=c++11
 LDLIBS   = -lstdc++ -lm
+PKG_CONFIG_PATH = "/opt/homebrew/lib/pkgconfig"
 
-PKG_CONFIG_PATH = "/opt/opencv/lib/pkgconfig:/usr/local/opt/opencv3/lib/pkgconfig"
-
-CXXFLAGS += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --cflags opencv)
-LDFLAGS  += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --libs-only-L opencv)
-LDLIBS   += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --libs-only-l opencv)
+CXXFLAGS += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --cflags opencv4)
+LDFLAGS  += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --libs-only-L opencv4)
+LDLIBS   += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --libs-only-l opencv4)
 
 sources = chrono.cpp framestore.cpp timebend.cpp chronogogo.cpp
 
