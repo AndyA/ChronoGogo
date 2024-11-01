@@ -1,6 +1,6 @@
 CXXFLAGS = -Wall -O2 -std=c++11
 LDLIBS   = -lstdc++ -lm
-# PKG_CONFIG_PATH = "/opt/homebrew/lib/pkgconfig"
+PKG_CONFIG_PATH = "/opt/homebrew/lib/pkgconfig"
 
 CXXFLAGS += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --cflags opencv4)
 LDFLAGS  += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --libs-only-L opencv4)
