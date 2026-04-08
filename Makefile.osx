@@ -8,14 +8,17 @@ LDLIBS   += $(shell PKG_CONFIG_PATH=${PKG_CONFIG_PATH} pkg-config --libs-only-l 
 
 sources = chrono.cpp framestore.cpp timebend.cpp chronogogo.cpp
 
-.PHONY: clean
+.PHONY: clean clean-build
 
 default: chrono
 
 chrono: $(sources:.cpp=.o)
 
-clean:
-	rm -f *.o *.d chrono
+clean: clean-build
+	rm -f chrono
+
+clean-build:
+	rm -f *.o *.d
 
 %.d: %.cpp
 	@set -e; rm -f $@; \
